@@ -1,0 +1,16 @@
+{
+  "title": "My first post",
+  "text": "This is my first post, I hope you like it!",
+  "tags": ["new", "tech"],
+  "creator": ObjectId("5e9969facc538f616f2d3a38"),
+  "comments": [
+    {
+      "text": "I like this post",
+      "author": ObjectId("5e9969facc538f616f2d3a39")
+    },
+    {
+      "text": "Hi! Bas",
+      "author": ObjectId("5e996ab3cc538f616f2d3a3a")
+    }
+  ]
+}

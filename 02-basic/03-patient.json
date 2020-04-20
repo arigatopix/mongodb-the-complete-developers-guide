@@ -1,0 +1,28 @@
+[
+    {
+        "firstname": "Teeruch",
+        "lastname": "Kaewsritas",
+        "age": 28,
+        "history": [
+            {"disease": "cold", "treatment": "mental health service"},
+            {"drug": true}
+        ]
+    },
+    {
+        "firstname": "Sephen",
+        "lastname": "Glider",
+        "age": 40,
+        "history": [
+            {"disease": "hot"}
+        ]
+    },
+    {
+        "firstname": "Chanikarn",
+        "lastname": "Barbie",
+        "age": 20,
+        "history": [
+            {"disease": "cold", "treatment": "mental health service"},
+            {"drug": false}
+        ]
+    }
+]

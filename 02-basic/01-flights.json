@@ -4,7 +4,8 @@
     "arrivalAirport": "SFO",
     "aircraft": "Airbus A380",
     "distance": 12000,
-    "intercontinental": true
+    "intercontinental": true,
+    "delayed": true
   },
   {
     "departureAirport": "LHR",

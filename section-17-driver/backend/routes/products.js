@@ -18,7 +18,7 @@ router.get('/', (req, res, next) => {
   const queryPage = req.query.page;
 
   // ตั้งค่า products per one page
-  const productPerPage = 2;
+  const productPerPage = 5;
 
   // ส่งให้ mongoDB แสดงผลโดยใช้ skip และ limit
   // Project นี้ไม่ได้ตั้งค่า Browser URL ดังนั้นต้องไปเปลี่ยน queryPage ใน React
@@ -28,9 +28,9 @@ router.get('/', (req, res, next) => {
     .db()
     .collection('products')
     .find()
-    .sort({ price: -1 })
-    .skip((queryPage - 1) * productPerPage)
-    .limit(productPerPage)
+    // .sort({ price: -1 })
+    // .skip((queryPage - 1) * productPerPage)
+    // .limit(productPerPage)
     .forEach((productDoc) => {
       // ทำให้ number -> string
       productDoc.price = productDoc.price.toString();

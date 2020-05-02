@@ -11,7 +11,7 @@ class ProductsPage extends Component {
 
   fetchData() {
     axios
-      .get('http://localhost:3100/products/?page=2')
+      .get('http://localhost:3100/products/?page=1')
       .then((productsResponse) => {
         this.setState({ isLoading: false, products: productsResponse.data });
       })

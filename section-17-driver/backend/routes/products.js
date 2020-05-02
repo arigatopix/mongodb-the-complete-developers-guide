@@ -1,6 +1,7 @@
 const Router = require('express').Router;
 const mongodb = require('mongodb');
 const Decimal128 = mongodb.Decimal128;
+const ObjectId = mongodb.ObjectID;
 
 // call MongoDB utils
 const db = require('../db');
@@ -37,8 +38,20 @@ router.get('/', (req, res, next) => {
 
 // Get single product
 router.get('/:id', (req, res, next) => {
-  const product = products.find((p) => p._id === req.params.id);
-  res.json(product);
+  // fetch data by id
+  db.getDb()
+    .db()
+    .collection('products')
+    .findOne({ _id: new ObjectId(req.params.id) })
+    .then((product) => {
+      // เมื่อ Javascript แสดงผล Decimal128 จะขึ้น Error ต้องปรับเป็น String
+      product.price = product.price.toString();
+
+      res.status(200).json(product);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: 'An error occurred' });
+    });
 });
 
 // Add new product

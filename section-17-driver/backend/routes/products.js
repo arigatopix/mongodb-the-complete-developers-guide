@@ -1,6 +1,15 @@
 const Router = require('express').Router;
 const MongoClient = require('mongodb').MongoClient;
 
+// Init MongoDB ..
+const uri =
+  'mongodb+srv://admindb:admindb@cluster0-yetfy.mongodb.net/shop?retryWrites=true&w=majority';
+
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 const router = Router();
 
 const products = [
@@ -56,16 +65,49 @@ const products = [
 router.get('/', (req, res, next) => {
   // Return a list of dummy products
   // Later, this data will be fetched from MongoDB
-  const queryPage = req.query.page;
-  const pageSize = 5;
-  let resultProducts = [...products];
-  if (queryPage) {
-    resultProducts = products.slice(
-      (queryPage - 1) * pageSize,
-      queryPage * pageSize
-    );
-  }
-  res.json(resultProducts);
+  // const queryPage = req.query.page;
+  // const pageSize = 5;
+  // let resultProducts = [...products];
+  // if (queryPage) {
+  //   resultProducts = products.slice(
+  //     (queryPage - 1) * pageSize,
+  //     queryPage * pageSize
+  //   );
+  // }
+
+  // init array of product
+  const products = [];
+
+  // fetch data from MongoDB
+  client
+    .connect()
+    .then(() => {
+      client
+        .db()
+        .collection('products')
+        .find()
+        .forEach((productDoc) => {
+          // ทำให้ number -> string
+          productDoc.price = productDoc.price.toString();
+
+          // add to array
+          products.push(productDoc);
+        })
+        .then(() => {
+          client.close();
+
+          // send products array to client
+          res.status(200).json(products);
+        })
+        .catch((err) => {
+          console.log(err);
+          client.close();
+          res.status(500).json({ message: 'An error occurred' });
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 // Get single product
@@ -84,15 +126,7 @@ router.post('', (req, res, next) => {
     image: req.body.image,
   };
 
-  // Init MongoDB ..
-  const uri =
-    'mongodb+srv://admindb:admindb@cluster0-yetfy.mongodb.net/shop?retryWrites=true&w=majority';
-
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
+  // MongoDB call
   client
     .connect()
     .then(() => {
@@ -116,6 +150,7 @@ router.post('', (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      res.status(500).json({ message: 'An error occurred' });
     });
 });
 

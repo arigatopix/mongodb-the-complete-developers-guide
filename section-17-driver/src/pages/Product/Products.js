@@ -6,25 +6,30 @@ import Products from '../../components/Products/Products';
 class ProductsPage extends Component {
   state = { isLoading: true, products: [] };
   componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
     axios
       .get('http://localhost:3100/products')
-      .then(productsResponse => {
+      .then((productsResponse) => {
         this.setState({ isLoading: false, products: productsResponse.data });
       })
-      .catch(err => {
+      .catch((err) => {
         this.setState({ isLoading: false, products: [] });
         this.props.onError('Loading products failed. Please try again later');
         console.log(err);
       });
   }
 
-  productDeleteHandler = productId => {
+  productDeleteHandler = (productId) => {
     axios
       .delete('http://localhost:3100/products/' + productId)
-      .then(result => {
+      .then((result) => {
+        this.fetchData();
         console.log(result);
       })
-      .catch(err => {
+      .catch((err) => {
         this.props.onError(
           'Deleting the product failed. Please try again later'
         );

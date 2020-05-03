@@ -43,6 +43,14 @@ class ProductsPage extends Component {
       .asArray()
       .then((products) => {
         console.log(products);
+
+        // transfrom data type Decimal128 to string
+        const transformedProducts = products.map((product) => {
+          product._id = product._id.toString();
+          product.price = product.price.toString();
+          return product;
+        });
+
         this.setState({ isLoading: false, products });
       })
       .catch((err) => {

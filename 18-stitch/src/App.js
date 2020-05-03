@@ -30,7 +30,12 @@ class App extends Component {
     );
 
     // AnonymousCredential
-    client.auth.loginWithCredential(new AnonymousCredential());
+    client.auth
+      .loginWithCredential(new AnonymousCredential())
+      .then((user) => {
+        console.log(`Logged in as anonymous user with id: ${user.id}`);
+      })
+      .catch(console.error);
   }
 
   logoutHandler = () => {

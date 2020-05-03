@@ -32,7 +32,7 @@ class ProductsPage extends Component {
   fetchData = () => {
     const mongodb = Stitch.defaultAppClient.getServiceClient(
       RemoteMongoClient.factory,
-      'mongodb-atlas'
+      'mongo-atlas'
     );
 
     // access to db
@@ -42,9 +42,11 @@ class ProductsPage extends Component {
       .find()
       .asArray()
       .then((products) => {
-        this.setState({ products });
+        console.log(products);
+        this.setState({ isLoading: false, products });
       })
       .catch((err) => {
+        this.setState({ isLoading: false });
         this.props.onError('Fetching product failed. Please try again later');
       });
   };

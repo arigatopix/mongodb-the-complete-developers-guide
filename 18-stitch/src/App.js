@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
+// Stitch work
+import { Stitch } from 'mongodb-stitch-browser-sdk';
+
 import Header from './components/Header/Header';
 import Modal from './components/Modal/Modal';
 import Backdrop from './components/Backdrop/Backdrop';
@@ -13,10 +16,17 @@ import ConfirmAccountPage from './pages/Auth/ConfirmAccount';
 
 class App extends Component {
   state = {
-    isAuth: false,
+    isAuth: true,
     authMode: 'login',
-    error: null
+    error: null,
   };
+
+  constructor() {
+    super();
+
+    // initial stitch mongodb
+    Stitch.initializeDefaultAppClient('myshopmongodbcourse-wiyxd');
+  }
 
   logoutHandler = () => {
     this.setState({ isAuth: false });
@@ -34,7 +44,7 @@ class App extends Component {
       request = axios.post('http://localhost:3100/signup', authData);
     }
     request
-      .then(authResponse => {
+      .then((authResponse) => {
         if (authResponse.status === 201 || authResponse.status === 200) {
           const token = authResponse.data.token;
           console.log(token);
@@ -43,7 +53,7 @@ class App extends Component {
           this.setState({ isAuth: true });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         this.errorHandler(err.response.data.message);
         console.log(err);
         this.setState({ isAuth: false });
@@ -51,46 +61,46 @@ class App extends Component {
   };
 
   authModeChangedHandler = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
-        authMode: prevState.authMode === 'login' ? 'signup' : 'login'
+        authMode: prevState.authMode === 'login' ? 'signup' : 'login',
       };
     });
   };
 
-  errorHandler = message => {
+  errorHandler = (message) => {
     this.setState({
-      error: message
+      error: message,
     });
   };
 
   render() {
     let routes = (
       <Switch>
-        <Redirect from="/" to="/products" exact />
-        <Redirect from="/auth" to="/products" exact />
-        <Redirect from="/signup" to="/products" exact />
+        <Redirect from='/' to='/products' exact />
+        <Redirect from='/auth' to='/products' exact />
+        <Redirect from='/signup' to='/products' exact />
         <Route
-          path="/product/:mode"
-          render={props => (
+          path='/product/:mode'
+          render={(props) => (
             <EditProductPage {...props} onError={this.errorHandler} />
           )}
         />
         <Route
-          path="/products/:id/:mode"
-          render={props => (
+          path='/products/:id/:mode'
+          render={(props) => (
             <EditProductPage {...props} onError={this.errorHandler} />
           )}
         />
         <Route
-          path="/products/:id"
-          render={props => (
+          path='/products/:id'
+          render={(props) => (
             <ProductPage {...props} onError={this.errorHandler} />
           )}
         />
         <Route
-          path="/products"
-          render={props => (
+          path='/products'
+          render={(props) => (
             <ProductsPage {...props} onError={this.errorHandler} />
           )}
         />
@@ -100,12 +110,12 @@ class App extends Component {
     if (!this.state.isAuth) {
       routes = (
         <Switch>
-          <Redirect from="/" to="/auth" exact />
-          <Redirect from="/products" to="/auth" />
-          <Redirect from="/product" to="/auth" />
-          <Route path="/confirm-account" component={ConfirmAccountPage} />
+          <Redirect from='/' to='/auth' exact />
+          <Redirect from='/products' to='/auth' />
+          <Redirect from='/product' to='/auth' />
+          <Route path='/confirm-account' component={ConfirmAccountPage} />
           <Route
-            path="/auth"
+            path='/auth'
             render={() => (
               <AuthPage
                 mode={this.state.authMode}
@@ -119,10 +129,10 @@ class App extends Component {
     }
 
     return (
-      <div className="App">
+      <div className='App'>
         <Modal
           open={!!this.state.error}
-          title="An Error Occurred"
+          title='An Error Occurred'
           onClose={() => this.errorHandler(null)}
         >
           <p>{this.state.error}</p>

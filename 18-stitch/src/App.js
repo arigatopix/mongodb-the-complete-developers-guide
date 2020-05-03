@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 // Stitch work
-import { Stitch } from 'mongodb-stitch-browser-sdk';
+import { Stitch, AnonymousCredential } from 'mongodb-stitch-browser-sdk';
 
 import Header from './components/Header/Header';
 import Modal from './components/Modal/Modal';
@@ -25,7 +25,12 @@ class App extends Component {
     super();
 
     // initial stitch mongodb
-    Stitch.initializeDefaultAppClient('myshopmongodbcourse-wiyxd');
+    const client = Stitch.initializeDefaultAppClient(
+      'myshopmongodbcourse-wiyxd'
+    );
+
+    // AnonymousCredential
+    client.auth.loginWithCredential(new AnonymousCredential());
   }
 
   logoutHandler = () => {
